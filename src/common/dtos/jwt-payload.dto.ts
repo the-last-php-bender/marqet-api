@@ -8,9 +8,9 @@ import { UserRole } from '../constants/enums';
  * immediately after POST /vendors and the frontend swaps it in — see auth.service.ts.
  */
 export class JwtPayloadDto {
-	sub: string;
-	email: string;
-	roles: UserRole[];
-	iat?: number;
-	exp?: number;
+  sub: string;
+  email: string;
+  roles: UserRole[];
+  iat?: number;
+  exp?: number;
 }

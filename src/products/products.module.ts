@@ -7,7 +7,10 @@ import { VendorsModule } from '../vendors/vendors.module';
 import { TripoQueueModule } from '../tripo/tripo-queue.module';
 import { NafdacProviderKind } from '../config/env.validation';
 import { ProductController } from './controller/product.controller';
-import { NafdacProduct, NafdacProductSchema } from './schemas/nafdac-product.schema';
+import {
+  NafdacProduct,
+  NafdacProductSchema,
+} from './schemas/nafdac-product.schema';
 import { Product, ProductSchema } from './schemas/product.schema';
 import { MockNafdacLookupService } from './service/mock-nafdac-lookup.service';
 import { NafdacLookupService } from './service/nafdac-lookup.service';
@@ -24,35 +27,40 @@ import { StandardProductCreationStrategy } from './service/strategies/standard-p
  * consumer receives the same substitutable dependency.
  */
 @Module({
-	imports: [
-		MongooseModule.forFeature([
-			{
-				name: Product.name,
-				schema: ProductSchema,
-				discriminators: [{ name: NafdacProduct.name, schema: NafdacProductSchema }],
-			},
-		]),
-		CategoriesModule,
-		VendorsModule,
-		TripoQueueModule,
-		HttpModule,
-	],
-	controllers: [ProductController],
-	providers: [
-		ProductService,
-		StandardProductCreationStrategy,
-		NafdacProductCreationStrategy,
-		ProductCreationService,
-		ProductImageService,
-		{
-			provide: NafdacLookupService,
-			useFactory: (httpService: HttpService, configService: ConfigService): NafdacLookupService =>
-				configService.get<NafdacProviderKind>('NAFDAC_PROVIDER') === 'registry'
-					? new RegistryNafdacLookupService(httpService, configService)
-					: new MockNafdacLookupService(),
-			inject: [HttpService, ConfigService],
-		},
-	],
-	exports: [ProductService, ProductImageService],
+  imports: [
+    MongooseModule.forFeature([
+      {
+        name: Product.name,
+        schema: ProductSchema,
+        discriminators: [
+          { name: NafdacProduct.name, schema: NafdacProductSchema },
+        ],
+      },
+    ]),
+    CategoriesModule,
+    VendorsModule,
+    TripoQueueModule,
+    HttpModule,
+  ],
+  controllers: [ProductController],
+  providers: [
+    ProductService,
+    StandardProductCreationStrategy,
+    NafdacProductCreationStrategy,
+    ProductCreationService,
+    ProductImageService,
+    {
+      provide: NafdacLookupService,
+      useFactory: (
+        httpService: HttpService,
+        configService: ConfigService,
+      ): NafdacLookupService =>
+        configService.get<NafdacProviderKind>('NAFDAC_PROVIDER') === 'registry'
+          ? new RegistryNafdacLookupService(httpService, configService)
+          : new MockNafdacLookupService(),
+      inject: [HttpService, ConfigService],
+    },
+  ],
+  exports: [ProductService, ProductImageService],
 })
 export class ProductsModule {}

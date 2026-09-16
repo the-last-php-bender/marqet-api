@@ -1,8 +1,8 @@
 export interface NafdacLookupResult {
-	productName: string;
-	expiryDate: Date;
-	manufacturer?: string;
-	isValid: boolean;
+  productName: string;
+  expiryDate: Date;
+  manufacturer?: string;
+  isValid: boolean;
 }
 
 /**
@@ -11,5 +11,5 @@ export interface NafdacLookupResult {
  * MockNafdacLookupService — switched purely by NAFDAC_PROVIDER env.
  */
 export abstract class NafdacLookupService {
-	abstract lookup(nafdacNumber: string): Promise<NafdacLookupResult | null>;
+  abstract lookup(nafdacNumber: string): Promise<NafdacLookupResult | null>;
 }

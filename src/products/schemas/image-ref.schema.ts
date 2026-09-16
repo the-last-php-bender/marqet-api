@@ -7,21 +7,25 @@ import { ProductImageView } from '../../common/constants/enums';
  */
 @Schema({ _id: false })
 export class ImageRef {
-	@Prop({ required: true, enum: ProductImageView })
-	view: ProductImageView;
+  @Prop({ required: true, enum: ProductImageView })
+  view: ProductImageView;
 
-	@Prop({ required: true })
-	url: string;
+  @Prop({ required: true })
+  url: string;
 
-	@Prop({ required: true })
-	key: string;
+  @Prop({ required: true })
+  key: string;
 }
 
 export const ImageRefSchema = SchemaFactory.createForClass(ImageRef);
 
 /** All six views must be present, each exactly once. */
 export function validateSixViews(images: ImageRef[]): boolean {
-	if (!Array.isArray(images) || images.length !== Object.values(ProductImageView).length) return false;
-	const uniqueViews = new Set(images.map((image) => image.view));
-	return uniqueViews.size === images.length;
+  if (
+    !Array.isArray(images) ||
+    images.length !== Object.values(ProductImageView).length
+  )
+    return false;
+  const uniqueViews = new Set(images.map((image) => image.view));
+  return uniqueViews.size === images.length;
 }

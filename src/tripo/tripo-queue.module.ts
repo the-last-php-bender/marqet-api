@@ -12,13 +12,13 @@ import { TripoGenerationQueue } from './tripo-generation.queue';
  */
 @Global()
 @Module({
-	imports: [BullModule.registerQueue({ name: TRIPO_GENERATION_QUEUE })],
-	providers: [
-		TripoGenerationQueue,
-		// Alias so consumers can inject the abstraction (ModelGenerationQueue)
-		// while the BullMQ queue is instantiated exactly once.
-		{ provide: ModelGenerationQueue, useExisting: TripoGenerationQueue },
-	],
-	exports: [BullModule, TripoGenerationQueue, ModelGenerationQueue],
+  imports: [BullModule.registerQueue({ name: TRIPO_GENERATION_QUEUE })],
+  providers: [
+    TripoGenerationQueue,
+    // Alias so consumers can inject the abstraction (ModelGenerationQueue)
+    // while the BullMQ queue is instantiated exactly once.
+    { provide: ModelGenerationQueue, useExisting: TripoGenerationQueue },
+  ],
+  exports: [BullModule, TripoGenerationQueue, ModelGenerationQueue],
 })
 export class TripoQueueModule {}

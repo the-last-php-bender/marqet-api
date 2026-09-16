@@ -16,46 +16,53 @@ const SCALED_MODEL_KEY_PREFIX = 'products';
  */
 @Injectable()
 export class ScaleCorrectionService {
-	private readonly logger = new Logger(ScaleCorrectionService.name);
+  private readonly logger = new Logger(ScaleCorrectionService.name);
 
-	constructor(
-		private readonly productService: ProductService,
-		private readonly meshInspector: GlbMeshInspector,
-		private readonly meshTransformer: GlbMeshTransformer,
-	) {}
+  constructor(
+    private readonly productService: ProductService,
+    private readonly meshInspector: GlbMeshInspector,
+    private readonly meshTransformer: GlbMeshTransformer,
+  ) {}
 
-	async applyScaleCorrection(productId: string): Promise<void> {
-		const product = await this.productService.findByIdOrThrow(productId);
-		if (!product.model3dUrl) throw new Error(`Product ${productId} has no raw 3D model to correct.`);
+  async applyScaleCorrection(productId: string): Promise<void> {
+    const product = await this.productService.findByIdOrThrow(productId);
+    if (!product.model3dUrl)
+      throw new Error(`Product ${productId} has no raw 3D model to correct.`);
 
-		const bounds = await this.meshInspector.getBounds(product.model3dUrl);
+    const bounds = await this.meshInspector.getBounds(product.model3dUrl);
 
-		const targetHeightCm = toCm(product.heightValue, product.sizeUnit);
-		const targetWidthCm = toCm(product.widthValue, product.sizeUnit);
+    const targetHeightCm = toCm(product.heightValue, product.sizeUnit);
+    const targetWidthCm = toCm(product.widthValue, product.sizeUnit);
 
-		if (bounds.height <= EPSILON || bounds.width <= EPSILON) {
-			this.logger.warn(`Product ${productId}: degenerate mesh bounds ${JSON.stringify(bounds)} — flagging for review.`);
-			await this.productService.markScaleNeedsReview(productId);
-			return;
-		}
+    if (bounds.height <= EPSILON || bounds.width <= EPSILON) {
+      this.logger.warn(
+        `Product ${productId}: degenerate mesh bounds ${JSON.stringify(bounds)} — flagging for review.`,
+      );
+      await this.productService.markScaleNeedsReview(productId);
+      return;
+    }
 
-		const scaleFromHeight = targetHeightCm / bounds.height;
-		const scaleFromWidth = targetWidthCm / bounds.width;
+    const scaleFromHeight = targetHeightCm / bounds.height;
+    const scaleFromWidth = targetWidthCm / bounds.width;
 
-		const delta = Math.abs(scaleFromHeight - scaleFromWidth) / Math.max(Math.max(scaleFromHeight, scaleFromWidth), EPSILON);
-		if (!Number.isFinite(delta) || delta > SCALE_DELTA_THRESHOLD) {
-			this.logger.warn(`Product ${productId}: scale delta ${(delta * 100).toFixed(1)}% exceeds threshold — flagging for review.`);
-			await this.productService.markScaleNeedsReview(productId);
-			return;
-		}
+    const delta =
+      Math.abs(scaleFromHeight - scaleFromWidth) /
+      Math.max(Math.max(scaleFromHeight, scaleFromWidth), EPSILON);
+    if (!Number.isFinite(delta) || delta > SCALE_DELTA_THRESHOLD) {
+      this.logger.warn(
+        `Product ${productId}: scale delta ${(delta * 100).toFixed(1)}% exceeds threshold — flagging for review.`,
+      );
+      await this.productService.markScaleNeedsReview(productId);
+      return;
+    }
 
-		const finalScale = (scaleFromHeight + scaleFromWidth) / 2;
-		const scaledUrl = await this.meshTransformer.applyScale({
-			modelUrl: product.model3dUrl,
-			scale: finalScale,
-			destinationKey: `${SCALED_MODEL_KEY_PREFIX}/${productId}/model.glb`,
-		});
+    const finalScale = (scaleFromHeight + scaleFromWidth) / 2;
+    const scaledUrl = await this.meshTransformer.applyScale({
+      modelUrl: product.model3dUrl,
+      scale: finalScale,
+      destinationKey: `${SCALED_MODEL_KEY_PREFIX}/${productId}/model.glb`,
+    });
 
-		await this.productService.completeWithScaledModel(productId, scaledUrl);
-	}
+    await this.productService.completeWithScaledModel(productId, scaledUrl);
+  }
 }

@@ -5,8 +5,10 @@ import { UserSeedService } from './service/user-seed.service';
 import { UserService } from './service/user.service';
 
 @Module({
-	imports: [MongooseModule.forFeature([{ name: User.name, schema: UserSchema }])],
-	providers: [UserService, UserSeedService],
-	exports: [UserService],
+  imports: [
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+  ],
+  providers: [UserService, UserSeedService],
+  exports: [UserService],
 })
 export class UsersModule {}

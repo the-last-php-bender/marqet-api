@@ -10,12 +10,12 @@ import { StandardProductCreationStrategy } from './strategies/standard-product-c
 import { ProductDocument } from '../schemas/product.schema';
 
 export interface NafdacVerificationView {
-	nafdacNumber: string;
-	found: boolean;
-	isValid?: boolean;
-	productName?: string;
-	expiryDate?: Date;
-	manufacturer?: string;
+  nafdacNumber: string;
+  found: boolean;
+  isValid?: boolean;
+  productName?: string;
+  expiryDate?: Date;
+  manufacturer?: string;
 }
 
 /**
@@ -25,44 +25,57 @@ export interface NafdacVerificationView {
  */
 @Injectable()
 export class ProductCreationService {
-	private readonly strategies: readonly ProductCreationStrategy[];
+  private readonly strategies: readonly ProductCreationStrategy[];
 
-	constructor(
-		private readonly categoryService: CategoryService,
-		private readonly vendorService: VendorService,
-		private readonly nafdacLookupService: NafdacLookupService,
-		standardStrategy: StandardProductCreationStrategy,
-		nafdacStrategy: NafdacProductCreationStrategy,
-	) {
-		this.strategies = [nafdacStrategy, standardStrategy];
-	}
+  constructor(
+    private readonly categoryService: CategoryService,
+    private readonly vendorService: VendorService,
+    private readonly nafdacLookupService: NafdacLookupService,
+    standardStrategy: StandardProductCreationStrategy,
+    nafdacStrategy: NafdacProductCreationStrategy,
+  ) {
+    this.strategies = [nafdacStrategy, standardStrategy];
+  }
 
-	async createForUser(userId: string, payload: unknown): Promise<ProductDocument> {
-		const vendor = await this.vendorService.findByUserIdOrThrow(userId);
+  async createForUser(
+    userId: string,
+    payload: unknown,
+  ): Promise<ProductDocument> {
+    const vendor = await this.vendorService.findByUserIdOrThrow(userId);
 
-		const categoryId = (payload as { categoryId?: string })?.categoryId;
-		if (!categoryId) throw new NotFoundException('Category not found.');
-		const category = await this.categoryService.findByIdOrThrow(categoryId);
+    const categoryId = (payload as { categoryId?: string })?.categoryId;
+    if (!categoryId) throw new NotFoundException('Category not found.');
+    const category = await this.categoryService.findByIdOrThrow(categoryId);
 
-		const strategy = this.strategies.find((candidate) => candidate.supports(category));
-		if (!strategy) throw new NotFoundException(`No creation flow configured for category "${category.name}".`);
+    const strategy = this.strategies.find((candidate) =>
+      candidate.supports(category),
+    );
+    if (!strategy)
+      throw new NotFoundException(
+        `No creation flow configured for category "${category.name}".`,
+      );
 
-		return strategy.create({ vendorId: vendor._id.toString(), category, payload });
-	}
+    return strategy.create({
+      vendorId: vendor._id.toString(),
+      category,
+      payload,
+    });
+  }
 
-	/** Pre-check used by POST /products/nafdac/verify before a full submit. */
-	async verifyNafdac(nafdacNumber: string): Promise<NafdacVerificationView> {
-		const result: NafdacLookupResult | null = await this.nafdacLookupService.lookup(nafdacNumber);
-		if (!result) {
-			return { nafdacNumber: nafdacNumber.toUpperCase(), found: false };
-		}
-		return {
-			nafdacNumber: nafdacNumber.toUpperCase(),
-			found: true,
-			isValid: result.isValid,
-			productName: result.productName,
-			expiryDate: result.expiryDate,
-			manufacturer: result.manufacturer,
-		};
-	}
+  /** Pre-check used by POST /products/nafdac/verify before a full submit. */
+  async verifyNafdac(nafdacNumber: string): Promise<NafdacVerificationView> {
+    const result: NafdacLookupResult | null =
+      await this.nafdacLookupService.lookup(nafdacNumber);
+    if (!result) {
+      return { nafdacNumber: nafdacNumber.toUpperCase(), found: false };
+    }
+    return {
+      nafdacNumber: nafdacNumber.toUpperCase(),
+      found: true,
+      isValid: result.isValid,
+      productName: result.productName,
+      expiryDate: result.expiryDate,
+      manufacturer: result.manufacturer,
+    };
+  }
 }

@@ -7,15 +7,15 @@ import { ProductDocument } from '../schemas/product.schema';
  * means adding a strategy — the orchestrator and existing code never change.
  */
 export abstract class ProductCreationStrategy {
-	/** Whether this strategy handles the given category. */
-	abstract supports(category: CategoryDocument): boolean;
+  /** Whether this strategy handles the given category. */
+  abstract supports(category: CategoryDocument): boolean;
 
-	/** Validates the raw payload against its own DTO and persists the product. */
-	abstract create(input: ProductCreationInput): Promise<ProductDocument>;
+  /** Validates the raw payload against its own DTO and persists the product. */
+  abstract create(input: ProductCreationInput): Promise<ProductDocument>;
 }
 
 export interface ProductCreationInput {
-	vendorId: string;
-	category: CategoryDocument;
-	payload: unknown;
+  vendorId: string;
+  category: CategoryDocument;
+  payload: unknown;
 }

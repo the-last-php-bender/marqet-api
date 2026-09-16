@@ -6,5 +6,8 @@ import { ImageRef } from '../../products/schemas/image-ref.schema';
  * BullMQ/Upstash specifics live behind this contract in the tripo module.
  */
 export abstract class ModelGenerationQueue {
-	abstract enqueueGeneration(productId: string, images: ImageRef[]): Promise<void>;
+  abstract enqueueGeneration(
+    productId: string,
+    images: ImageRef[],
+  ): Promise<void>;
 }

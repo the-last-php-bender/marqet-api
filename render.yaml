@@ -1,0 +1,63 @@
+services:
+  - type: web
+    name: marqet-api
+    runtime: node
+    plan: free
+    region: oregon
+    healthCheckPath: /health
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: node dist/main
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: JWT_EXPIRES_IN
+        value: 1d
+      # Secrets are filled in the Render dashboard on first deploy (sync: false)
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_PRIVATE_KEY_BASE64
+        sync: false
+      - key: JWT_PUBLIC_KEY_BASE64
+        sync: false
+      - key: UPSTASH_REDIS_URL
+        sync: false
+      - key: STORAGE_PROVIDER
+        value: r2
+      - key: R2_ACCOUNT_ID
+        sync: false
+      - key: R2_ACCESS_KEY_ID
+        sync: false
+      - key: R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: R2_BUCKET_NAME
+        value: marqet-image
+      - key: R2_PUBLIC_BUCKET_DOMAIN
+        value: https://pub-757a899861c940c1985f596f2fa6e903.r2.dev
+      - key: TRIPO_API_KEY
+        sync: false
+      - key: TRIPO_API_BASE_URL
+        value: https://api.tripo3d.ai/v2/openapi
+      - key: TRIPO_POLL_INTERVAL_MS
+        value: "5000"
+      - key: TRIPO_POLL_TIMEOUT_MS
+        value: "900000"
+      - key: NAFDAC_PROVIDER
+        value: registry
+      - key: NAFDAC_REGISTRY_BASE_URL
+        value: https://greenbook.nafdac.gov.ng
+      - key: EMAIL_PROVIDER
+        value: smtp
+      - key: EMAIL_FROM_ADDRESS
+        value: Marqet <no-reply@marqet.shop>
+      - key: SMTP_HOST
+        value: sandbox.smtp.mailtrap.io
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_SECURE
+        value: "false"
+      - key: SMTP_USER
+        value: f7e30db60dbc04
+      - key: SMTP_PASSWORD
+        sync: false
