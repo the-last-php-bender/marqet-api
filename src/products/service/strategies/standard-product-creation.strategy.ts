@@ -8,11 +8,7 @@ import {
 } from '../../../common/constants/enums';
 import { CategoryDocument } from '../../../categories/schemas/category.schema';
 import { CreateStandardProductDto } from '../../dto/create-standard-product.dto';
-import {
-  ProductCreationInput,
-  ProductCreationStrategy,
-} from '../../interfaces/product-creation-strategy.interface';
-import { PRODUCT_KIND } from '../../schemas/product.schema';
+import { ProductCreationInput, ProductCreationStrategy } from '../../interfaces/product-creation-strategy.interface';
 import { ProductService } from '../product.service';
 
 /**
@@ -33,7 +29,6 @@ export class StandardProductCreationStrategy extends ProductCreationStrategy {
     const dto = this.validatePayload(payload);
 
     return this.productService.create({
-      kind: PRODUCT_KIND.STANDARD,
       vendor: vendorId,
       category: category._id.toString(),
       productName: dto.productName.trim(),
