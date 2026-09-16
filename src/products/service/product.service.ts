@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Model3dStatus, ProductStatus } from '../../common/constants/enums';
+import { PaginationQueryDto } from '../../common/dtos/pagination-query.dto';
 import { PaginatedResult, paginate } from '../../common/utils/pagination.utils';
 import { QueryProductsDto } from '../dto/query-products.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
@@ -70,6 +71,22 @@ export class ProductService {
       price: product.price,
       coverImage: cover?.url ?? null,
     };
+  }
+
+  /** Seller dashboard: all (non-deleted) products for a given vendor, any status. */
+  async findByVendor(
+    vendorId: string,
+    params: PaginationQueryDto,
+  ): Promise<PaginatedResult<Product>> {
+    return paginate({
+      model: this.productModel,
+      filter: { vendor: new Types.ObjectId(vendorId), isDeleted: false },
+      params,
+      populate: [
+        { path: 'category', select: 'name requiresNafdac' },
+        { path: 'vendor', select: 'storeName logoUrl' },
+      ],
+    });
   }
 
   findFiltered(query: QueryProductsDto): Promise<PaginatedResult<Product>> {

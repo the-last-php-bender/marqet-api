@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -27,6 +28,7 @@ import { Throttle } from '@nestjs/throttler';
 import { ProductImageView, UserRole } from '../../common/constants/enums';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
+import { PaginationQueryDto } from '../../common/dtos/pagination-query.dto';
 import { Roles } from '../../common/guards/roles.guard';
 import { VendorService } from '../../vendors/service/vendor.service';
 import { CreateNafdacProductDto } from '../dto/create-nafdac-product.dto';
@@ -141,6 +143,27 @@ export class ProductController {
   })
   async verifyNafdac(@Body() dto: VerifyNafdacDto) {
     return this.productCreationService.verifyNafdac(dto.nafdacNumber);
+  }
+
+  @Get('mine')
+  @ApiBearerAuth('access-token')
+  @Roles(UserRole.USER)
+  @ApiOperation({
+    summary: 'List my products (seller dashboard)',
+    description:
+      'Returns all non-deleted products owned by the authenticated seller, ' +
+      'regardless of status (DRAFT, PENDING_3D, ACTIVE, etc.). ' +
+      'Includes category name, vendor info, and model3dStatus for each product.',
+  })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Paginated product list.' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Missing or invalid token.' })
+  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Caller has no store profile.' })
+  async listMine(
+    @CurrentUser() user: { userId: string },
+    @Query() query: PaginationQueryDto,
+  ) {
+    const vendor = await this.vendorService.findByUserIdOrThrow(user.userId);
+    return this.productService.findByVendor(vendor._id.toString(), query);
   }
 
   @Post(':id/images')
