@@ -116,7 +116,7 @@ export class ProductController {
     status: HttpStatus.OK,
     description: 'Paginated product cards.',
   })
-  async list(query: QueryProductsDto) {
+  async list(@Query() query: QueryProductsDto) {
     return this.productService.findSummariesFiltered(query);
   }
 
