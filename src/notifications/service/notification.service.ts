@@ -8,10 +8,14 @@ import { NotificationEvent } from '../../common/constants/enums';
  * channel never touches callers.
  */
 export abstract class NotificationService {
-	/**
-	 * @param userId recipient user id (resolved to a destination internally)
-	 * @param event  which lifecycle event happened
-	 * @param payload template data (productId, productName, model3dUrl, ...)
-	 */
-	abstract notify(userId: string, event: NotificationEvent, payload: Record<string, unknown>): Promise<void>;
+  /**
+   * @param userId recipient user id (resolved to a destination internally)
+   * @param event  which lifecycle event happened
+   * @param payload template data (productId, productName, model3dUrl, ...)
+   */
+  abstract notify(
+    userId: string,
+    event: NotificationEvent,
+    payload: Record<string, unknown>,
+  ): Promise<void>;
 }

@@ -12,16 +12,16 @@ import { S3StorageProvider } from './providers/s3-storage.provider';
  */
 @Global()
 @Module({
-	providers: [
-		{
-			provide: StorageProvider,
-			useFactory: (configService: ConfigService): StorageProvider =>
-				configService.get<string>('STORAGE_PROVIDER') === 's3'
-					? new S3StorageProvider(configService)
-					: new R2StorageProvider(configService),
-			inject: [ConfigService],
-		},
-	],
-	exports: [StorageProvider],
+  providers: [
+    {
+      provide: StorageProvider,
+      useFactory: (configService: ConfigService): StorageProvider =>
+        configService.get<string>('STORAGE_PROVIDER') === 's3'
+          ? new S3StorageProvider(configService)
+          : new R2StorageProvider(configService),
+      inject: [ConfigService],
+    },
+  ],
+  exports: [StorageProvider],
 })
 export class StorageModule {}

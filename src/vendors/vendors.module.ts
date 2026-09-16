@@ -5,9 +5,11 @@ import { VendorController } from './controller/vendor.controller';
 import { VendorService } from './service/vendor.service';
 
 @Module({
-	imports: [MongooseModule.forFeature([{ name: Vendor.name, schema: VendorSchema }])],
-	controllers: [VendorController],
-	providers: [VendorService],
-	exports: [VendorService],
+  imports: [
+    MongooseModule.forFeature([{ name: Vendor.name, schema: VendorSchema }]),
+  ],
+  controllers: [VendorController],
+  providers: [VendorService],
+  exports: [VendorService],
 })
 export class VendorsModule {}

@@ -12,20 +12,26 @@ export const REQUEST_ID_KEY = 'requestId';
  */
 @Injectable()
 export class RequestContextMiddleware implements NestMiddleware {
-	private readonly logger = new Logger('HTTP');
+  private readonly logger = new Logger('HTTP');
 
-	use(req: Request & { [REQUEST_ID_KEY]?: string }, res: Response, next: NextFunction): void {
-		const requestId = randomUUID();
-		req[REQUEST_ID_KEY] = requestId;
-		res.setHeader(REQUEST_ID_HEADER, requestId);
+  use(
+    req: Request & { [REQUEST_ID_KEY]?: string },
+    res: Response,
+    next: NextFunction,
+  ): void {
+    const requestId = randomUUID();
+    req[REQUEST_ID_KEY] = requestId;
+    res.setHeader(REQUEST_ID_HEADER, requestId);
 
-		const start = process.hrtime.bigint();
+    const start = process.hrtime.bigint();
 
-		res.on('finish', () => {
-			const durationMs = Number(process.hrtime.bigint() - start) / 1_000_000;
-			this.logger.log(`${req.method} ${req.originalUrl} ${res.statusCode} ${durationMs.toFixed(1)}ms [${requestId}]`);
-		});
+    res.on('finish', () => {
+      const durationMs = Number(process.hrtime.bigint() - start) / 1_000_000;
+      this.logger.log(
+        `${req.method} ${req.originalUrl} ${res.statusCode} ${durationMs.toFixed(1)}ms [${requestId}]`,
+      );
+    });
 
-		next();
-	}
+    next();
+  }
 }

@@ -11,26 +11,26 @@ export type UserDocument = HydratedDocument<User>;
  */
 @Schema({ timestamps: true })
 export class User {
-	@Prop({ required: true, unique: true, lowercase: true, trim: true })
-	email: string;
+  @Prop({ required: true, unique: true, lowercase: true, trim: true })
+  email: string;
 
-	@Prop({ required: true })
-	passwordHash: string;
+  @Prop({ required: true })
+  passwordHash: string;
 
-	@Prop({ required: true, trim: true })
-	fullName: string;
+  @Prop({ required: true, trim: true })
+  fullName: string;
 
-	@Prop({ type: [String], enum: UserRole, default: [UserRole.USER] })
-	roles: UserRole[];
+  @Prop({ type: [String], enum: UserRole, default: [UserRole.USER] })
+  roles: UserRole[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
 
 UserSchema.set('toJSON', {
-	transform: (_doc, ret) => {
-		const output = ret as unknown as Record<string, unknown>;
-		delete output.passwordHash;
-		delete output.__v;
-		return output;
-	},
+  transform: (_doc, ret) => {
+    const output = ret as unknown as Record<string, unknown>;
+    delete output.passwordHash;
+    delete output.__v;
+    return output;
+  },
 });

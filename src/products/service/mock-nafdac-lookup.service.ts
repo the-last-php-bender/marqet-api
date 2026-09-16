@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { NafdacLookupResult, NafdacLookupService } from './nafdac-lookup.service';
+import {NafdacLookupResult,NafdacLookupService,} from './nafdac-lookup.service';
 
 /**
  * Deterministic mock for local dev and demos.
@@ -12,18 +12,18 @@ const MOCK_EXPIRY_MONTHS = 18;
 
 @Injectable()
 export class MockNafdacLookupService extends NafdacLookupService {
-	async lookup(nafdacNumber: string): Promise<NafdacLookupResult | null> {
-		const normalized = nafdacNumber.trim().toUpperCase();
-		if (!VALID_NAFDAC_PATTERN.test(normalized)) return null;
+  async lookup(nafdacNumber: string): Promise<NafdacLookupResult | null> {
+    const normalized = nafdacNumber.trim().toUpperCase();
+    if (!VALID_NAFDAC_PATTERN.test(normalized)) return null;
 
-		const expiryDate = new Date();
-		expiryDate.setMonth(expiryDate.getMonth() + MOCK_EXPIRY_MONTHS);
+    const expiryDate = new Date();
+    expiryDate.setMonth(expiryDate.getMonth() + MOCK_EXPIRY_MONTHS);
 
-		return {
-			productName: `Registered Product ${normalized}`,
-			expiryDate,
-			manufacturer: 'Mock Pharmaceuticals Ltd.',
-			isValid: true,
-		};
-	}
+    return {
+      productName: `Registered Product ${normalized}`,
+      expiryDate,
+      manufacturer: 'Mock Pharmaceuticals Ltd.',
+      isValid: true,
+    };
+  }
 }
