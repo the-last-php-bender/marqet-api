@@ -19,10 +19,12 @@ export class ImageRef {
 
 export const ImageRefSchema = SchemaFactory.createForClass(ImageRef);
 
-/** All six views must be present, each exactly once. */
+/** All six views must be present, each exactly once. Empty array allowed at draft creation. */
 export function validateSixViews(images: ImageRef[]): boolean {
+  // Draft products are created with images=[]; allow this at creation time.
+  // Once images are attached, exactly 6 unique views are required.
+  if (images.length === 0) return true;
   if (
-    !Array.isArray(images) ||
     images.length !== Object.values(ProductImageView).length
   )
     return false;
