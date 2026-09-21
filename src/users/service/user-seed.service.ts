@@ -7,8 +7,8 @@ import { CreateUserInput, UserService } from './user.service';
 const BCRYPT_SALT_ROUNDS = 10;
 
 /**
- * Idempotent bootstrap seed: when ADMIN_SEED_EMAIL/ADMIN_SEED_PASSWORD are set,
- * ensures that admin account exists so ops endpoints are demo-ready.
+ * Bootstrap seed: when ADMIN_SEED_EMAIL/ADMIN_SEED_PASSWORD are set, ensures
+ * that admin account exists.
  */
 @Injectable()
 export class UserSeedService implements OnApplicationBootstrap {

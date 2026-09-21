@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { CategoryService } from './category.service';
 
-/** Demo-ready taxonomy seeded once on boot (idempotent). */
+/** Default categories seeded on boot (idempotent). */
 const DEFAULT_CATEGORIES = [
   {
     name: 'Drugs',

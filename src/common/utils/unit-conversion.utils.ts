@@ -2,7 +2,6 @@ import { LengthUnit } from '../constants/enums';
 
 /**
  * Centimetres per unit — the single conversion table for real-world dimensions.
- * Data-driven (Open/Closed): adding a unit means adding one entry here, nothing else.
  */
 export const CM_PER_UNIT: Record<LengthUnit, number> = {
   [LengthUnit.CM]: 1,

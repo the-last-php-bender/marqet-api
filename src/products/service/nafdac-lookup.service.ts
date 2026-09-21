@@ -6,9 +6,8 @@ export interface NafdacLookupResult {
 }
 
 /**
- * NAFDAC registry abstraction (Dependency Inversion boundary).
- * Production binds RegistryNafdacLookupService, dev/demo binds
- * MockNafdacLookupService — switched purely by NAFDAC_PROVIDER env.
+ * NAFDAC registry abstraction. Production binds RegistryNafdacLookupService,
+ * dev/demo binds MockNafdacLookupService, selected by NAFDAC_PROVIDER.
  */
 export abstract class NafdacLookupService {
   abstract lookup(nafdacNumber: string): Promise<NafdacLookupResult | null>;

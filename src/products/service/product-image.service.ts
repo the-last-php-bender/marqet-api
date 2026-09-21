@@ -17,8 +17,8 @@ type ViewFiles = Partial<
 >;
 
 /**
- * Owns the 6-view image upload flow: validation, parallel storage upload,
- * status transition to PENDING_3D and handing off to the generation queue.
+ * 6-view image upload flow: validation, parallel storage upload,
+ * PENDING_3D transition, and hand-off to the 3D generation queue.
  */
 @Injectable()
 export class ProductImageService {

@@ -15,7 +15,6 @@ import {
 import { Throttle } from '@nestjs/throttler';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { Public } from '../../common/decorators/public.decorator';
-import { AuthenticatedPrincipal } from '../strategies/jwt.strategy';
 import { AuthService } from '../service/auth.service';
 import { AuthResponseDto } from '../dto/auth-response.dto';
 import { LoginRequestDto } from '../dto/login-request.dto';

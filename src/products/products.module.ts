@@ -23,8 +23,8 @@ import { StandardProductCreationStrategy } from './service/strategies/standard-p
 
 /**
  * Products module — creation branching, image pipeline and querying.
- * The NAFDAC lookup implementation is bound here once (env-driven) so every
- * consumer receives the same substitutable dependency.
+ * The NAFDAC lookup implementation is bound here once so every consumer
+ * receives the same dependency.
  */
 @Module({
   imports: [

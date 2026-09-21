@@ -8,12 +8,10 @@ import {
 } from './nafdac-lookup.service';
 
 /**
- * Row shape served by the OFFICIAL NAFDAC Greenbook product feed
- * (greenbook.nafdac.gov.ng). The Greenbook exposes its catalogue through a
- * server-side JSON protocol (DataTables) on its root URL; it only answers
- * JSON when called with `X-Requested-With: XMLHttpRequest`, otherwise it
- * renders the HTML page. We always speak JSON to that endpoint and match the
- * registration number exactly — never HTML scraping.
+ * Row shape served by the official NAFDAC Greenbook product feed
+ * (greenbook.nafdac.gov.ng). The feed answers JSON only when called with
+ * `X-Requested-With: XMLHttpRequest`; we always speak JSON to it and match
+ * registration numbers exactly.
  */
 interface GreenbookRow {
   NAFDAC?: string;
@@ -31,11 +29,7 @@ interface GreenbookFeedResponse {
   data?: GreenbookRow[];
 }
 
-/**
- * Real NAFDAC registry adapter backed by the official Greenbook.
- * Enable with NAFDAC_PROVIDER=registry (+ optional NAFDAC_REGISTRY_BASE_URL
- * override, defaults to the production Greenbook).
- */
+/** NAFDAC registry adapter backed by the official Greenbook (NAFDAC_PROVIDER=registry). */
 @Injectable()
 export class RegistryNafdacLookupService extends NafdacLookupService {
   private static readonly DEFAULT_BASE_URL = 'https://greenbook.nafdac.gov.ng';

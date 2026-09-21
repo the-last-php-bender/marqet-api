@@ -6,28 +6,17 @@ import {
   IsString,
   Min,
   ValidateIf,
-  ValidationArguments,
   validateSync,
 } from 'class-validator';
 
-/**
- * Storage backends supported by the storage abstraction.
- * Switching provider is a pure env change — zero code changes (DIP).
- */
 export const STORAGE_PROVIDERS = ['r2', 's3'] as const;
 export type StorageProviderKind = (typeof STORAGE_PROVIDERS)[number];
 
-/** NAFDAC lookup backends. */
 export const NAFDAC_PROVIDERS = ['mock', 'registry'] as const;
 export type NafdacProviderKind = (typeof NAFDAC_PROVIDERS)[number];
 
 const NODE_ENVS = ['development', 'production', 'test', 'staging'] as const;
 
-/**
- * Fail-fast environment contract validated on boot with class-validator
- * (project standard — no Joi). A missing variable must crash startup,
- * never surface as a runtime error mid-demo.
- */
 export class EnvironmentVariables {
   @Type(() => Number)
   @IsInt()
@@ -157,40 +146,35 @@ export class EnvironmentVariables {
   @IsString()
   EMAIL_FROM_ADDRESS!: string;
 
-  @ValidateIf(
-    (o: EnvironmentVariables) => o.EMAIL_PROVIDER === 'plunk',
-    { message: 'EMAIL_PROVIDER_API_KEY is required when EMAIL_PROVIDER=plunk' },
-  )
+  @ValidateIf((o: EnvironmentVariables) => o.EMAIL_PROVIDER === 'plunk', {
+    message: 'EMAIL_PROVIDER_API_KEY is required when EMAIL_PROVIDER=plunk',
+  })
   @IsString()
   EMAIL_PROVIDER_API_KEY?: string;
 
-  @ValidateIf(
-    (o: EnvironmentVariables) => o.EMAIL_PROVIDER === 'smtp',
-    { message: 'SMTP_HOST is required when EMAIL_PROVIDER=smtp' },
-  )
+  @ValidateIf((o: EnvironmentVariables) => o.EMAIL_PROVIDER === 'smtp', {
+    message: 'SMTP_HOST is required when EMAIL_PROVIDER=smtp',
+  })
   @IsString()
   SMTP_HOST!: string;
 
-  @ValidateIf(
-    (o: EnvironmentVariables) => o.EMAIL_PROVIDER === 'smtp',
-    { message: 'SMTP_PORT is required when EMAIL_PROVIDER=smtp' },
-  )
+  @ValidateIf((o: EnvironmentVariables) => o.EMAIL_PROVIDER === 'smtp', {
+    message: 'SMTP_PORT is required when EMAIL_PROVIDER=smtp',
+  })
   @Type(() => Number)
   @IsInt()
   @Min(1)
   SMTP_PORT!: number;
 
-  @ValidateIf(
-    (o: EnvironmentVariables) => o.EMAIL_PROVIDER === 'smtp',
-    { message: 'SMTP_USER is required when EMAIL_PROVIDER=smtp' },
-  )
+  @ValidateIf((o: EnvironmentVariables) => o.EMAIL_PROVIDER === 'smtp', {
+    message: 'SMTP_USER is required when EMAIL_PROVIDER=smtp',
+  })
   @IsString()
   SMTP_USER!: string;
 
-  @ValidateIf(
-    (o: EnvironmentVariables) => o.EMAIL_PROVIDER === 'smtp',
-    { message: 'SMTP_PASSWORD is required when EMAIL_PROVIDER=smtp' },
-  )
+  @ValidateIf((o: EnvironmentVariables) => o.EMAIL_PROVIDER === 'smtp', {
+    message: 'SMTP_PASSWORD is required when EMAIL_PROVIDER=smtp',
+  })
   @IsString()
   SMTP_PASSWORD!: string;
 
@@ -225,7 +209,7 @@ function assertValidRs256Key(base64Key: string, name: string): void {
 }
 
 /**
- * ConfigModule.validate hook. Returns the merged, typed env map used by ConfigService.
+ * ConfigModule.validate hook — fails startup fast when required vars are missing.
  */
 export function validateEnv(
   config: Record<string, unknown>,

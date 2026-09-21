@@ -3,11 +3,9 @@ import { Type } from 'class-transformer';
 import {
   IsBoolean,
   IsEnum,
-  IsInt,
   IsMongoId,
   IsNumber,
   IsOptional,
-  Max,
   Min,
 } from 'class-validator';
 import { Model3dStatus, ProductStatus } from '../../common/constants/enums';

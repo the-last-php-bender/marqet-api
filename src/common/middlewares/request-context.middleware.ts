@@ -6,9 +6,8 @@ export const REQUEST_ID_HEADER = 'x-request-id';
 export const REQUEST_ID_KEY = 'requestId';
 
 /**
- * Attaches a correlation id to every request before routing/guards run and
- * logs one structured line per request. The id is echoed back in the
- * `x-request-id` response header so clients can quote it in bug reports.
+ * Attaches a correlation id to every request and logs one line per request.
+ * The id is echoed back in the `x-request-id` response header.
  */
 @Injectable()
 export class RequestContextMiddleware implements NestMiddleware {

@@ -3,7 +3,7 @@ import { Product } from './product.schema';
 
 /**
  * Discriminator for NAFDAC-regulated products. Regulatory fields are filled
- * from the authoritative lookup at creation time and are NEVER client-editable.
+ * from the registry lookup at creation time and are not client-editable.
  */
 @Schema()
 export class NafdacProduct extends Product {

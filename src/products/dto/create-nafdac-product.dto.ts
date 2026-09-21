@@ -1,7 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
-  IsDateString,
   IsEnum,
   IsMongoId,
   IsNumber,
@@ -14,10 +13,8 @@ import {
 import { LengthUnit } from '../../common/constants/enums';
 
 /**
- * Shape for products in NAFDAC-regulated categories (requiresNafdac === true).
- * `productName` is OPTIONAL here because it is auto-filled from the registry
- * lookup; everything regulatory is derived server-side and never trusted
- * from the client.
+ * Payload for products in NAFDAC-regulated categories (requiresNafdac === true).
+ * `productName` is optional because it is auto-filled from the registry lookup.
  */
 export class CreateNafdacProductDto {
   @ApiProperty({

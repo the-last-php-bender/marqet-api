@@ -12,8 +12,8 @@ import {
 } from '../interfaces/storage-provider.interface';
 
 /**
- * Native AWS S3 adapter. Drop-in swap for R2 — same contract, different client
- * configuration (region-based endpoint, optional custom endpoint for MinIO/LocalStack).
+ * AWS S3 adapter. Same contract as the R2 adapter, with region-based endpoint
+ * and an optional custom endpoint for MinIO/LocalStack.
  */
 @Injectable()
 export class S3StorageProvider extends StorageProvider {

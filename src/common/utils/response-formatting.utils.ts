@@ -6,8 +6,8 @@ export interface ResponseFormat {
 }
 
 /**
- * The one and only response envelope used by both the success interceptor
- * and the exception filter — change the shape here and it changes everywhere.
+ * The response envelope shared by the success interceptor and the exception
+ * filter.
  */
 export function formatResponse({
   statusCode,

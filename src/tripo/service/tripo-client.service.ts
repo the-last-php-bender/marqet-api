@@ -20,12 +20,9 @@ interface TripoTaskResponse {
 
 const TRIPO_STATUS_SUCCESS = 'success';
 const TERMINAL_FAILURE_STATUSES = new Set(['failed', 'cancelled', 'banned']);
-const HTTP_UNPROCESSABLE = 422;
 
 /**
- * Thin Tripo AI adapter (Dependency Inversion boundary). All knowledge of the
- * Tripo REST API — auth header, payload shape, status polling — lives here;
- * nothing else in the codebase imports axios against Tripo.
+ * Tripo AI adapter — owns the API auth header, payload shapes and status polling.
  */
 @Injectable()
 export class TripoClientService {
@@ -136,5 +133,3 @@ export class TripoClientService {
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
-export { HTTP_UNPROCESSABLE };

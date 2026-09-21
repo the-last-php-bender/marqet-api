@@ -12,16 +12,13 @@ import { UserRole } from '../constants/enums';
 export const ROLES_KEY = 'roles';
 
 /**
- * Role gate metadata. Variadic for readable call sites:
- *   @Roles(UserRole.USER)   // any authenticated account
- *   @Roles(UserRole.ADMIN)  // operational routes only
+ * Role gate metadata, e.g. @Roles(UserRole.USER) or @Roles(UserRole.ADMIN).
  */
 export const Roles = (...roles: UserRole[]) => SetMetadata(ROLES_KEY, roles);
 
 /**
- * Checks the authenticated principal's role claims. There is deliberately no
- * BUYER/VENDOR split — every USER buys and sells with one account; only ADMIN
- * gates operational routes.
+ * Checks the authenticated principal's role claims. There is no BUYER/VENDOR
+ * split — every USER can buy and sell; only ADMIN gates operational routes.
  */
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -36,8 +33,10 @@ export class RolesGuard implements CanActivate {
     );
     if (!requiredRoles || requiredRoles.length === 0) return true;
 
-    const request = context.switchToHttp().getRequest();
-    const user = request.user as { roles?: UserRole[] } | undefined;
+    const request = context
+      .switchToHttp()
+      .getRequest<{ user?: { roles?: UserRole[] } }>();
+    const user = request.user;
 
     if (!user?.roles?.length) {
       throw new ForbiddenException(

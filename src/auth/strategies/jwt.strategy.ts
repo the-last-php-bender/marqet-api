@@ -11,9 +11,7 @@ export interface AuthenticatedPrincipal {
 }
 
 /**
- * Verifies RS256-signed tokens with the PUBLIC key only.
- * The private key never leaves the auth module — other services could verify
- * tokens with just this public key and could never mint valid ones.
+ * Verifies RS256-signed tokens using the public key only.
  */
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

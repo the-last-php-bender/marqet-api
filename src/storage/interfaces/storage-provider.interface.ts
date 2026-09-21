@@ -14,9 +14,8 @@ export interface UploadedObject {
 }
 
 /**
- * Storage abstraction (Dependency Inversion boundary).
- * Business code depends on THIS class only; concrete R2/S3 adapters live in
- * providers/ and are swapped by STORAGE_PROVIDER in storage.module.ts.
+ * Storage abstraction. Business code depends on this class only; concrete
+ * R2/S3 adapters live in providers/ and are selected by STORAGE_PROVIDER.
  */
 export abstract class StorageProvider {
   abstract upload(input: UploadInput): Promise<UploadedObject>;

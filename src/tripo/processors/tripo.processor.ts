@@ -21,9 +21,9 @@ interface TripoGenerationJobData {
 
 /**
  * Consumes 'tripo-generation' jobs: creates the multiview task, waits for the
- * mesh, scale-corrects it against real-world dimensions and notifies the seller.
- * Transient errors bubble up so BullMQ retries with backoff; after the final
- * attempt the product is marked FAILED and the seller is emailed.
+ * mesh, scale-corrects it against real-world dimensions, and notifies the
+ * seller. Failures are retried by BullMQ; on the final attempt the product is
+ * marked FAILED and the seller is emailed.
  */
 @Processor(TRIPO_GENERATION_QUEUE)
 @Injectable()

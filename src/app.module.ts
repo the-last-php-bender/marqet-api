@@ -26,7 +26,7 @@ import { AppController } from './app.controller';
 
 @Module({
   imports: [
-    // ===== Environment (fail-fast class-validator contract) =====
+    // ===== Environment (fail-fast on boot) =====
     ConfigModule.forRoot({ isGlobal: true, validate: validateEnv }),
 
     // ===== MongoDB =====
@@ -38,7 +38,7 @@ import { AppController } from './app.controller';
       inject: [ConfigService],
     }),
 
-    // ===== Redis / BullMQ root connection (Upstash, TLS) =====
+    // ===== Redis / BullMQ (Upstash, TLS) =====
     BullModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
         connection: {

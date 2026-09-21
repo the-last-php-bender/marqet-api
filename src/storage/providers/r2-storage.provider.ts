@@ -12,8 +12,8 @@ import {
 } from '../interfaces/storage-provider.interface';
 
 /**
- * Cloudflare R2 adapter — speaks the S3 API against the account-scoped endpoint.
- * Public reads are served from the bucket's public r2.dev domain.
+ * Cloudflare R2 adapter, using the S3 API against the account-scoped endpoint.
+ * Public reads are served from the bucket's r2.dev domain.
  */
 @Injectable()
 export class R2StorageProvider extends StorageProvider {

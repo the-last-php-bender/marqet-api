@@ -1,4 +1,4 @@
-/** BullMQ queue name — single source of truth. */
+/** BullMQ queue name. */
 export const TRIPO_GENERATION_QUEUE = 'tripo-generation';
 
 /** Ordered views required by Tripo's multiview task type. */

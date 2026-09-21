@@ -6,17 +6,15 @@ import { TripoGenerationQueue } from './tripo-generation.queue';
 
 /**
  * Registers the 'tripo-generation' queue and exposes it behind the
- * ModelGenerationQueue abstraction. The BullMQ/Upstash ROOT connection is
- * configured once in AppModule; Upstash requires TLS (`rediss://`) and
- * BullMQ requires maxRetriesPerRequest: null — both set there.
+ * ModelGenerationQueue abstraction. The BullMQ connection itself is configured
+ * once in AppModule.
  */
 @Global()
 @Module({
   imports: [BullModule.registerQueue({ name: TRIPO_GENERATION_QUEUE })],
   providers: [
     TripoGenerationQueue,
-    // Alias so consumers can inject the abstraction (ModelGenerationQueue)
-    // while the BullMQ queue is instantiated exactly once.
+    // Expose the abstraction while keeping a single queue instance.
     { provide: ModelGenerationQueue, useExisting: TripoGenerationQueue },
   ],
   exports: [BullModule, TripoGenerationQueue, ModelGenerationQueue],

@@ -4,9 +4,14 @@ import {
   Injectable,
   NestInterceptor,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs';
 import { formatResponse } from '../utils/response-formatting.utils';
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
 
 /**
  * Wraps every successful response in the standard envelope.
@@ -15,14 +20,15 @@ import { formatResponse } from '../utils/response-formatting.utils';
 export class ResponseInterceptor implements NestInterceptor {
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     return next.handle().pipe(
-      map((data) => {
+      map((data: unknown) => {
         const ctx = context.switchToHttp();
-        const response = ctx.getResponse();
+        const response = ctx.getResponse<Response>();
         const statusCode = response.statusCode || 200;
-        const message =
-          typeof data === 'string'
-            ? data
-            : data?.message || 'Request successful';
+
+        let message = 'Request successful';
+        if (typeof data === 'string') message = data;
+        else if (isRecord(data) && typeof data.message === 'string')
+          message = data.message;
 
         return formatResponse({
           statusCode,
