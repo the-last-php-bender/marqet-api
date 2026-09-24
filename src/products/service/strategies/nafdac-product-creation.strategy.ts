@@ -17,11 +17,9 @@ import { NafdacLookupService } from '../nafdac-lookup.service';
 import { ProductService } from '../product.service';
 
 /**
- * NAFDAC-regulated branch. The registry is the source of truth:
- * - lookup must succeed AND report isValid, otherwise creation is rejected;
- * - productName/expiryDate come from the registry (auto-filled), never trusted
- *   from the client;
- * - nafdacVerified is set only when isValid === true.
+ * NAFDAC-regulated branch. The registry is the source of truth: product name
+ * and expiry date are auto-filled from it, and creation is rejected unless the
+ * number looks up as valid.
  */
 @Injectable()
 export class NafdacProductCreationStrategy extends ProductCreationStrategy {

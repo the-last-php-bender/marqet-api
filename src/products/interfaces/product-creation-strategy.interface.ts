@@ -2,9 +2,8 @@ import { CategoryDocument } from '../../categories/schemas/category.schema';
 import { ProductDocument } from '../schemas/product.schema';
 
 /**
- * Strategy contract for product creation (Strategy + Open/Closed).
- * One implementation per regulatory branch; adding a new branch (e.g. SONCAP)
- * means adding a strategy — the orchestrator and existing code never change.
+ * Strategy contract for product creation. One implementation per regulatory
+ * branch; the orchestrator selects via `supports`.
  */
 export abstract class ProductCreationStrategy {
   /** Whether this strategy handles the given category. */

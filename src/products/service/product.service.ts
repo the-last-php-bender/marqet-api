@@ -1,14 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
-import { Model3dStatus, ProductStatus } from '../../common/constants/enums';
+import {
+  Model3dStatus,
+  ProductImageView,
+  ProductStatus,
+} from '../../common/constants/enums';
 import { PaginationQueryDto } from '../../common/dtos/pagination-query.dto';
 import { PaginatedResult, paginate } from '../../common/utils/pagination.utils';
 import { QueryProductsDto } from '../dto/query-products.dto';
 import { UpdateProductDto } from '../dto/update-product.dto';
 import { Product, ProductDocument } from '../schemas/product.schema';
 
-/** Slim catalogue card — exactly what listing screens need. */
 export interface ProductSummaryView {
   _id: string;
   productName: string;
@@ -16,13 +19,11 @@ export interface ProductSummaryView {
   coverImage: string | null;
 }
 
-/** Loose filter shape accepted by Model.find (avoids mongoose version-specific helper types). */
 type ProductFilter = Record<string, unknown>;
 
 /**
- * Persistence + query logic for products only (SRP).
- * Creation branching lives in ProductCreationService; the image upload flow
- * lives in ProductImageService.
+ * Product persistence and querying. Creation branching and the image upload
+ * flow live in ProductCreationService and ProductImageService respectively.
  */
 @Injectable()
 export class ProductService {
@@ -32,9 +33,8 @@ export class ProductService {
   ) {}
 
   /**
-   * Persists via the base model. Because the NafdacProduct discriminator is
-   * registered on this schema, passing `kind: NafdacProduct` transparently
-   * creates a typed NAFDAC document.
+   * Persists a product. The NafdacProduct discriminator is registered on this
+   * schema, so passing `kind: NafdacProduct` creates a typed NAFDAC document.
    */
   async create(doc: Record<string, unknown>): Promise<ProductDocument> {
     return this.productModel.create(doc as never);
@@ -48,7 +48,7 @@ export class ProductService {
     return product;
   }
 
-  /** Public catalogue: slim cards (name, price, cover image) with filters + pagination. */
+  /** Catalogue cards (name, price, cover image) with filters + pagination. */
   async findSummariesFiltered(
     query: QueryProductsDto,
   ): Promise<PaginatedResult<ProductSummaryView>> {
@@ -61,7 +61,7 @@ export class ProductService {
 
   private toSummary(product: Product): ProductSummaryView {
     const cover =
-      product.images?.find((image) => image.view === 'FRONT') ??
+      product.images?.find((image) => image.view === ProductImageView.FRONT) ??
       product.images?.[0];
     // lean() documents carry _id at runtime even though the schema class doesn't declare it.
     const id = (product as unknown as { _id: { toString(): string } })._id;
@@ -148,7 +148,7 @@ export class ProductService {
       throw new NotFoundException('Product not found.');
   }
 
-  /** Rollback target when queue hand-off fails after an image upload. */
+  /** Reverts a product to DRAFT when the 3D queue hand-off fails. */
   async markDraft(productId: string): Promise<void> {
     await this.patchOrThrowNotFound(productId, {
       status: ProductStatus.DRAFT,

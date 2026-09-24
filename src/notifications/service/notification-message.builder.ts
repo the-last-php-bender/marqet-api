@@ -9,9 +9,7 @@ export interface ProductNotificationPayload {
 const MODEL_LINK_TMPL = `<p><a href="{url}">View your 3D model</a></p>`;
 
 function modelLink(model3dUrl?: string): string {
-  return model3dUrl
-    ? MODEL_LINK_TMPL.replace('{url}', model3dUrl)
-    : '';
+  return model3dUrl ? MODEL_LINK_TMPL.replace('{url}', model3dUrl) : '';
 }
 
 export interface NotificationMessage {
@@ -21,7 +19,6 @@ export interface NotificationMessage {
 
 /**
  * Shared transactional templates for the 3D product lifecycle.
- * Used by every email transport (SMTP today, Plunk/Resend if re-enabled).
  */
 export function buildProductNotificationMessage(
   event: NotificationEvent,

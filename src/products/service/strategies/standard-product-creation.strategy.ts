@@ -8,7 +8,10 @@ import {
 } from '../../../common/constants/enums';
 import { CategoryDocument } from '../../../categories/schemas/category.schema';
 import { CreateStandardProductDto } from '../../dto/create-standard-product.dto';
-import { ProductCreationInput, ProductCreationStrategy } from '../../interfaces/product-creation-strategy.interface';
+import {
+  ProductCreationInput,
+  ProductCreationStrategy,
+} from '../../interfaces/product-creation-strategy.interface';
 import { ProductService } from '../product.service';
 
 /**

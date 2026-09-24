@@ -4,8 +4,8 @@ import { HydratedDocument, Types } from 'mongoose';
 export type VendorDocument = HydratedDocument<Vendor>;
 
 /**
- * A seller's store profile. Any authenticated USER can create exactly one —
- * there is no role gate or approval step: one account buys AND sells.
+ * A seller's store profile. Any authenticated user can create exactly one;
+ * there is no role gate or approval step.
  */
 @Schema({ timestamps: true })
 export class Vendor {

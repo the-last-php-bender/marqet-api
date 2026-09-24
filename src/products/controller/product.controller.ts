@@ -155,9 +155,18 @@ export class ProductController {
       'regardless of status (DRAFT, PENDING_3D, ACTIVE, etc.). ' +
       'Includes category name, vendor info, and model3dStatus for each product.',
   })
-  @ApiResponse({ status: HttpStatus.OK, description: 'Paginated product list.' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Missing or invalid token.' })
-  @ApiResponse({ status: HttpStatus.NOT_FOUND, description: 'Caller has no store profile.' })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Paginated product list.',
+  })
+  @ApiResponse({
+    status: HttpStatus.UNAUTHORIZED,
+    description: 'Missing or invalid token.',
+  })
+  @ApiResponse({
+    status: HttpStatus.NOT_FOUND,
+    description: 'Caller has no store profile.',
+  })
   async listMine(
     @CurrentUser() user: { userId: string },
     @Query() query: PaginationQueryDto,

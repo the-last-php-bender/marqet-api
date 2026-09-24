@@ -1,9 +1,9 @@
 import { ImageRef } from '../../products/schemas/image-ref.schema';
 
 /**
- * Boundary between the products module and the Tripo worker infrastructure
- * (Dependency Inversion). Products only know "enqueue generation"; the
- * BullMQ/Upstash specifics live behind this contract in the tripo module.
+ * Boundary between the products module and the 3D generation infrastructure.
+ * Products only know "enqueue generation"; the queue specifics stay in the
+ * tripo module.
  */
 export abstract class ModelGenerationQueue {
   abstract enqueueGeneration(

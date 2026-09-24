@@ -7,7 +7,3 @@ const MIME_EXTENSIONS: Record<string, string> = {
 export function getExtensionFromMimeType(mimeType: string): string | null {
   return MIME_EXTENSIONS[mimeType.toLowerCase()] ?? null;
 }
-
-export function getAllowedImageMimeTypes(): string[] {
-  return Object.keys(MIME_EXTENSIONS);
-}

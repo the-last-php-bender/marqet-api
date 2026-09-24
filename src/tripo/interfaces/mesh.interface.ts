@@ -13,12 +13,12 @@ export interface ApplyScaleInput {
   destinationKey: string;
 }
 
-/** Read side of the scale-correction pipeline (Dependency Inversion boundary). */
+/** Reads mesh geometry bounds from a stored GLB. */
 export abstract class MeshInspector {
   abstract getBounds(modelUrl: string): Promise<MeshBounds>;
 }
 
-/** Write side of the scale-correction pipeline (Dependency Inversion boundary). */
+/** Rescales mesh geometry and stores the result. */
 export abstract class MeshTransformer {
   abstract applyScale(input: ApplyScaleInput): Promise<string>;
 }

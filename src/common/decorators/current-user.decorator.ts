@@ -1,5 +1,4 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { JwtPayloadDto } from '../dtos/jwt-payload.dto';
 
 /**
  * Injects the authenticated principal or one of its fields:
@@ -8,7 +7,9 @@ import { JwtPayloadDto } from '../dtos/jwt-payload.dto';
  */
 export const CurrentUser = createParamDecorator(
   (field: string | undefined, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
+    const request = ctx
+      .switchToHttp()
+      .getRequest<{ user?: Record<string, unknown> }>();
     const user = request.user;
     return field && user ? user[field] : user;
   },

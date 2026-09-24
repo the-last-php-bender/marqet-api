@@ -13,7 +13,7 @@ interface TripoGenerationJobData {
 
 /**
  * Producer side of the 3D pipeline. Implements the products module's
- * abstraction — products never see BullMQ/Upstash directly.
+ * abstraction so products never depend on BullMQ directly.
  */
 @Injectable()
 export class TripoGenerationQueue implements ModelGenerationQueue {

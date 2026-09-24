@@ -31,10 +31,7 @@ async function fetchGlb(
   return Buffer.from(response.data);
 }
 
-/**
- * Read adapter: computes the bounding box straight from POSITION accessor
- * min/max (mandatory per glTF spec for POSITION), so no geometry decode needed.
- */
+/** Reads mesh bounds from the POSITION accessor min/max (no geometry decode). */
 @Injectable()
 export class GlbMeshInspector extends MeshInspector {
   constructor(private readonly httpService: HttpService) {
@@ -86,10 +83,8 @@ export class GlbMeshInspector extends MeshInspector {
 }
 
 /**
- * Write adapter: multiplies every FLOAT/VEC3 position vertex by `scale` in the
- * BIN chunk, updates accessor min/max accordingly, re-packs the GLB and
- * uploads it. Geometry is truly rescaled, so every viewer AND this pipeline's
- * own inspector agree on the new size.
+ * Rewrites every position vertex by `scale` in the BIN chunk, updates the
+ * accessor min/max, re-packs the GLB and uploads it.
  */
 @Injectable()
 export class GlbMeshTransformer extends MeshTransformer {

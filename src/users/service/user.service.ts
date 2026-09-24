@@ -14,7 +14,7 @@ export interface CreateUserInput {
   fullName: string;
 }
 
-/** Persistence-only concerns for the users collection (SRP). */
+/** Persistence for the users collection. */
 @Injectable()
 export class UserService {
   constructor(

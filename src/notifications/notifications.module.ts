@@ -18,7 +18,11 @@ import { SmtpNotificationService } from './service/smtp-notification.service';
         userService: UserService,
       ): NotificationService =>
         configService.get('EMAIL_PROVIDER') === 'plunk'
-          ? new PlunkNotificationService(httpService, userService, configService)
+          ? new PlunkNotificationService(
+              httpService,
+              userService,
+              configService,
+            )
           : new SmtpNotificationService(userService, configService),
       inject: [ConfigService, HttpService, UserService],
     },

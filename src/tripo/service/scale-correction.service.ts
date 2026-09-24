@@ -9,10 +9,10 @@ const EPSILON = 1e-6;
 const SCALED_MODEL_KEY_PREFIX = 'products';
 
 /**
- * Compares the real-world dimensions the seller declared against the generated
- * mesh bounds and rescales the mesh so it matches reality:
- * - consistent scales (within threshold)  → apply average scale → ACTIVE
- * - inconsistent / broken geometry        → NEEDS_REVIEW (human decides)
+ * Compares the seller's declared dimensions against the generated mesh bounds
+ * and rescales the mesh to match:
+ * - consistent scales (within threshold) → average scale → ACTIVE
+ * - inconsistent / broken geometry       → NEEDS_REVIEW
  */
 @Injectable()
 export class ScaleCorrectionService {

@@ -13,8 +13,7 @@ import {
 import { LengthUnit } from '../../common/constants/enums';
 
 /**
- * Shape for products in NON-regulated categories (requiresNafdac === false).
- * Kept separate from the NAFDAC DTO (Interface Segregation) — no wall of @IsOptional().
+ * Payload for products in non-regulated categories (requiresNafdac === false).
  */
 export class CreateStandardProductDto {
   @ApiProperty({

@@ -1,11 +1,8 @@
-/**
- * Single source of truth for every enum used across the API.
- * Rule: never compare against raw string literals — always import from here.
- */
+/** Shared enums for the API. */
 
 /**
- * Single-account model: every registered user is a USER who can buy AND sell.
- * ADMIN exists purely for operational endpoints (category management, moderation).
+ * Single-account model: every registered user can buy AND sell. ADMIN exists
+ * for operational endpoints (category management, moderation).
  */
 export enum UserRole {
   USER = 'USER',

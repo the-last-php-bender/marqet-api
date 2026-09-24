@@ -4,9 +4,8 @@ import { HydratedDocument } from 'mongoose';
 export type CategoryDocument = HydratedDocument<Category>;
 
 /**
- * Data-driven product taxonomy. `requiresNafdac` is the Open/Closed extension
- * point: adding a new regulated category never requires touching product
- * creation logic — the branch reads this flag.
+ * Product taxonomy. `requiresNafdac` selects which creation flow applies to a
+ * category, so product creation logic does not need per-category branching.
  */
 @Schema({ timestamps: true })
 export class Category {

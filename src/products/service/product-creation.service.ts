@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CategoryDocument } from '../../categories/schemas/category.schema';
 import { CategoryService } from '../../categories/service/category.service';
 import { VendorService } from '../../vendors/service/vendor.service';
 import { ProductCreationStrategy } from '../interfaces/product-creation-strategy.interface';
@@ -19,9 +18,8 @@ export interface NafdacVerificationView {
 }
 
 /**
- * Create-time orchestrator (the ONLY place that knows how branching works).
- * The branch is chosen from Category.requiresNafdac — data-driven, so adding
- * a new regulated category requires zero code changes here (Open/Closed).
+ * Routes product creation to the right strategy based on the category
+ * (`Category.requiresNafdac` decides the branch).
  */
 @Injectable()
 export class ProductCreationService {

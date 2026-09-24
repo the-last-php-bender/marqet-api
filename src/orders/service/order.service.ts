@@ -37,9 +37,8 @@ interface RequestingUser {
 }
 
 /**
- * Order use-cases: purchase creation (server-priced), role-aware listing and
- * guarded status transitions. Money math NEVER trusts the client — totals are
- * recomputed from DB prices at creation time.
+ * Order creation (server-priced), role-aware listing and guarded status
+ * transitions. Totals are recomputed from DB prices.
  */
 @Injectable()
 export class OrderService {

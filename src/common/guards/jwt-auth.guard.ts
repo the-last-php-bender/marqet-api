@@ -6,11 +6,9 @@ import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
 /**
  * Global JWT guard (registered via APP_GUARD). Routes opt out with @Public().
  *
- * ARCHITECTURAL DECISION (role upgrade): roles can change mid-session because a
- * buyer becomes a vendor without logging out. Rather than having this guard
- * re-check the DB on every request (stateful), we chose option (a) from the spec:
- * POST /vendors re-issues a fresh token containing the VENDOR role and the
- * frontend swaps it in. That keeps this guard fully stateless.
+ * Roles can change mid-session (e.g. a buyer becomes a vendor). Instead of
+ * re-reading the DB per request, POST /vendors re-issues a token with the new
+ * role, keeping this guard stateless.
  */
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

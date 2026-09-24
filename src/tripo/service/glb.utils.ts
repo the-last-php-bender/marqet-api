@@ -4,16 +4,6 @@ const CHUNK_TYPE_BIN = 0x004e4942; // 'BIN'
 const HEADER_BYTES = 12;
 const CHUNK_HEADER_BYTES = 8;
 
-export interface GlbBinChunk {
-  start: number;
-  length: number;
-}
-
-export interface ParsedGlb {
-  json: Record<string, unknown>;
-  bin: GlbBinChunk | null;
-}
-
 /** Minimal glTF JSON shape used by our mesh services. */
 export interface GltfJson {
   asset?: { version?: string };

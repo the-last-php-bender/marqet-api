@@ -11,8 +11,8 @@ import { JwtPayloadDto } from '../../common/dtos/jwt-payload.dto';
 const BCRYPT_SALT_ROUNDS = 10;
 
 /**
- * Authentication use-cases. Token issuing is centralised here so the signing
- * algorithm and claims live in exactly one place.
+ * Authentication use-cases. Token signing is centralised here so the algorithm
+ * and claims live in one place.
  */
 @Injectable()
 export class AuthService {

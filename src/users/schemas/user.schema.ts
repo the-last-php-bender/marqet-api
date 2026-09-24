@@ -5,9 +5,8 @@ import { UserRole } from '../../common/constants/enums';
 export type UserDocument = HydratedDocument<User>;
 
 /**
- * Single-account model: one login for buying AND selling.
- * Roles exist only to separate the operational ADMIN from regular USERs —
- * there is deliberately no BUYER/VENDOR split (a user does both).
+ * Single-account model: one login for buying AND selling. Roles only separate
+ * the operational ADMIN from regular USERs.
  */
 @Schema({ timestamps: true })
 export class User {

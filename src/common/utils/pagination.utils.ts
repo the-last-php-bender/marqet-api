@@ -25,8 +25,8 @@ export interface PaginateOptions<T> {
 }
 
 /**
- * Generic pagination helper shared by every list endpoint (DRY).
- * Runs the page query and the count in parallel.
+ * Generic pagination helper shared by every list endpoint. Runs the page query
+ * and the count in parallel.
  */
 export async function paginate<T>(
   options: PaginateOptions<T>,

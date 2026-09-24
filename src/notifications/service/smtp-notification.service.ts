@@ -11,9 +11,8 @@ import {
 } from './notification-message.builder';
 
 /**
- * SMTP implementation of the notification abstraction.
- * Uses nodemailer against any SMTP relay (Mailtrap sandbox in dev,
- * Resend/POSTMARK/Amazon SES SMTP in prod) configured via env.
+ * SMTP implementation of the notification abstraction, using nodemailer
+ * against the relay configured via env.
  */
 @Injectable()
 export class SmtpNotificationService extends NotificationService {
@@ -22,13 +21,12 @@ export class SmtpNotificationService extends NotificationService {
   private readonly fromAddress: string;
   private readonly userService: UserService;
 
-  constructor(
-    userService: UserService,
-    configService: ConfigService,
-  ) {
+  constructor(userService: UserService, configService: ConfigService) {
     super();
     this.userService = userService;
-    const secure = (configService.get<string>('SMTP_SECURE') ?? 'false').toLowerCase() === 'true';
+    const secure =
+      (configService.get<string>('SMTP_SECURE') ?? 'false').toLowerCase() ===
+      'true';
     const port = Number(configService.get<string>('SMTP_PORT') ?? '587');
     this.transporter = nodemailer.createTransport({
       host: configService.getOrThrow<string>('SMTP_HOST'),

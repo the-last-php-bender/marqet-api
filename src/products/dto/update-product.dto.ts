@@ -12,10 +12,9 @@ import {
 import { LengthUnit } from '../../common/constants/enums';
 
 /**
- * Editable product fields ONLY.
- * Regulatory fields (nafdacNumber, expiryDate, nafdacVerified) and the
- * auto-filled productName are deliberately absent — they can never be
- * patched by clients, enforced by the type system itself.
+ * Editable product fields only. Regulatory fields (nafdacNumber, expiryDate,
+ * nafdacVerified) and the auto-filled productName are absent, so clients
+ * cannot patch them.
  */
 export class UpdateProductDto {
   @ApiPropertyOptional({

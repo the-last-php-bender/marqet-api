@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
+import { Response } from 'express';
 import {
   formatResponse,
   ResponseFormat,
@@ -20,7 +21,7 @@ import {
 export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
+    const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
 
     const payload: ResponseFormat = {
@@ -31,15 +32,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (exception instanceof BadRequestException) {
       const exceptionResponse = exception.getResponse();
       if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
-        const messages = (exceptionResponse as Record<string, unknown>)[
-          'message'
-        ];
-        if (Array.isArray(messages)) {
+        const raw = (exceptionResponse as Record<string, unknown>)['message'];
+        if (Array.isArray(raw)) {
+          const messages = raw as string[];
           payload.message = messages[0];
           payload.error = messages;
-        } else if (typeof messages === 'string') {
-          payload.message = messages;
-          payload.error = [messages];
+        } else if (typeof raw === 'string') {
+          payload.message = raw;
+          payload.error = [raw];
         }
       }
     }
@@ -58,7 +58,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
+    const response = ctx.getResponse<Response>();
 
     this.logger.error(
       'Unhandled exception',
