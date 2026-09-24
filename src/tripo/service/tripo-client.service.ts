@@ -11,6 +11,7 @@ interface TripoTaskResponse {
     task_id: string;
     status?: string;
     progress?: number;
+    error_msg?: string;
     output?: {
       pbr_model?: string;
       model?: string;
@@ -19,7 +20,12 @@ interface TripoTaskResponse {
 }
 
 const TRIPO_STATUS_SUCCESS = 'success';
-const TERMINAL_FAILURE_STATUSES = new Set(['failed', 'cancelled', 'banned']);
+const TERMINAL_FAILURE_STATUSES = new Set([
+  'failed',
+  'cancelled',
+  'banned',
+  'expired',
+]);
 
 /**
  * Tripo AI adapter — owns the API auth header, payload shapes and status polling.
@@ -46,13 +52,20 @@ export class TripoClientService {
       configService.get<number>('TRIPO_POLL_TIMEOUT_MS') ?? 900_000;
   }
 
-  /** Creates a multiview task; `imageUrls` must be ordered FRONT, BACK, LEFT, RIGHT. */
+  /**
+   * Creates a `multiview_to_model` task; `imageUrls` must be ordered
+   * FRONT, LEFT, BACK, RIGHT as Tripo's schema expects.
+   */
   async createMultiviewTask(imageUrls: string[]): Promise<string> {
     try {
+      const files = imageUrls.map((url) => ({
+        type: url.toLowerCase().endsWith('.png') ? 'png' : 'jpg',
+        url,
+      }));
       const response = await firstValueFrom(
         this.httpService.post<TripoTaskResponse>(
           `${this.baseUrl}/task`,
-          { type: 'multiview', files: imageUrls },
+          { type: 'multiview_to_model', files },
           { headers: this.authHeaders(), timeout: 30_000 },
         ),
       );
@@ -77,8 +90,9 @@ export class TripoClientService {
         return modelUrl;
       }
       if (status.status && TERMINAL_FAILURE_STATUSES.has(status.status)) {
+        const detail = status.error_msg ? ` (${status.error_msg})` : '';
         throw new Error(
-          `Tripo task ${taskId} ended with status "${status.status}".`,
+          `Tripo task ${taskId} ended with status "${status.status}".${detail}`,
         );
       }
 
