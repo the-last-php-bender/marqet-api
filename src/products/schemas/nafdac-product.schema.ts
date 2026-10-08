@@ -16,6 +16,9 @@ export class NafdacProduct extends Product {
   @Prop({ default: true })
   nameAutoFilled: boolean;
 
+  @Prop()
+  manufacturer?: string;
+
   @Prop({ required: true, default: false })
   nafdacVerified: boolean;
 }

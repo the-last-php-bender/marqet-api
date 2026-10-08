@@ -65,6 +65,7 @@ export class NafdacProductCreationStrategy extends ProductCreationStrategy {
       isDeleted: false,
       nafdacNumber: dto.nafdacNumber.toUpperCase(),
       expiryDate: result.expiryDate,
+      manufacturer: result.manufacturer,
       nameAutoFilled: !dto.productName,
       nafdacVerified: result.isValid,
     });
